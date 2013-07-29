@@ -1,0 +1,62 @@
+.TH VLOCK-MAIN 8 "28 July 2007" "Linux" "Linux Programmer's Manual"
+.SH NAME
+vlock-main \- lock current virtual console
+.SH SYNOPSIS
+.B vlock-main [plugins...]
+.SH DESCRIPTION
+\fBvlock-main\fR is part of vlock(1), the Virtual Console locking program for
+Linux.  It locks the current session and will only exit if the current user can
+authenticate themselves.  The root user will also be able to unlock the
+session, unless disabled at compile time.  The command line arguments specify
+plugins that should be loaded by vlock-main.  See vlock-plugins(5) for more
+information.
+.PP
+If plugin support is disabled at compile time, the only supported argument is
+"all".
+.SH "ENVIRONMENT VARIABLES"
+The following environment variables can be used to change the behavior of
+vlock-main:
+.PP
+.B USER
+.IP
+If this variable is when vlock-main is run as root (uid 0) vlock locks
+the screen as this user instead of root.  The root password will still be able
+to unlock the session, unless disabled at compile time.
+.PP
+.B VLOCK_ALL_MESSAGE
+.IP
+If this variable is set and all consoles are locked its contents will be used
+as the locking message instead of the default message.
+.PP
+.B VLOCK_CURRENT_MESSAGE
+.IP
+If this variable is set and only the current consoles is locked its contents
+will be used as the locking message instead of the default message.
+.PP
+.B VLOCK_MESSAGE
+.IP
+If this variable is set its contents will be used as the locking message
+instead of the default.  This overrides the former two variables.
+.PP
+.B VLOCK_TIMEOUT
+.IP
+Set this variable to specify the timeout (in seconds) after which the screen
+saver plugins (if any) will be invoked.  If this variable is unset or set to an
+invalid value or 0 no timeout is used.  See vlock-plugins(5) for more
+information about plugins.
+.PP
+.B VLOCK_PROMPT_TIMEOUT
+.IP
+Set this variable to specify the amount of time (in seconds) you will have to
+enter your password at the password prompt.  If this variable is unset or set
+to an invalid value or 0 no timeout is used.  \fBWarning\fR: If this value is
+too low, you may not be able to unlock your session.
+.PP
+.SH SIGNALS
+Several signals are ignored.  \fBvlock-main\fR will try to exit cleanly if
+SIGTERM is received.
+.SH "SEE ALSO"
+.BR vlock (1),
+.BR vlock-plugins (5)
+.SH AUTHORS
+Frank Benkstein <frank-vlock@benkstein.net>

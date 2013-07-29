@@ -1,0 +1,233 @@
+2011-09-18 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2.3
+
+	* Fix vlock not reacting to input when started in the background
+	from bash.  (Thanks to Amy Fong for the report.)
+
+2008-05-14 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2.2
+
+	* Fix and improve build system: use LDLIBS instead of LDFLAGS where
+	appropriate and provide EXTRA_CFLAGS/EXTRA_LDFLAGS parameters in ./configure.
+	* Display number of authentication tries on exit.
+
+2008-03-26 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2.1
+
+	* Fix a script handling bug.
+
+2008-03-21 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2
+
+	* Small plugin documentation update.
+
+2008-01-15 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 rc5
+
+	* Fixed snprintf() corner case in "new" module.
+	* Restore timeout if select() was interrupted by a signal in prompt().
+
+2007-12-29 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 rc4
+
+	* Slightly changed the fix for the previous security issue: directory parts
+	are now silently stripped from erroneous names instead of reported as errors.
+	* Fixed a file descriptor leak in script handling.
+	* Fixed a bug where vlock would run in an infinite loop if not started from
+	a terminal.  Now it simply exits.
+	* Added unit tests (using cunit).
+
+2007-11-28 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 rc3
+
+	* A critical security problem (local root exploit) was fixed:
+		Previous versions of vlock (since 2.2 alpha1) contained a serious flaw
+		that allowed any user to execute arbitrary code as root .  This was
+		possible because plugin names could contain "../" thus escaping the
+		pre-defined plugin directory.  All users of vlock 2.2 development versions
+		are advised to update.
+	* Improved script handling.
+	* Added two more scripts.
+
+2007-11-26 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 rc2
+
+	* Fixed man page installation error.
+
+2007-11-17 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 rc1
+
+	* Updated documentation.
+
+2007-11-04 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 beta2
+
+	* Improved error handling and error messages.
+	* Fixed portability bugs.
+	* Fixed dependency handling bug.
+
+2007-10-16 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 beta1
+
+	* Documentation update.
+	* Improved error handling.
+
+2007-10-03 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 alpha3
+
+	* Added ./configure script.
+	* Improved plugin handling.
+	* Improved error handling.
+	* Improved child process handling.
+
+2007-09-21 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 alpha2
+
+	* Added libcaca based screen saver module.
+	* Miscellaneous minor fixes.
+
+2007-09-19 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.2 alpha1
+
+	* Medium rewrite was undertaken.
+	* Support for plugins (modules and scripts) was added.
+	* vlock-all, vlock-new, and vlock-nosysrq were converted to modules.
+	* Other sample modules and scripts were added.
+	* vlock now tries to terminale cleanly if killed by SIGTERM and on errors.
+
+2007-09-08 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.1
+
+	* Documentation update.
+
+2007-08-29 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.1 rc1
+
+	* Really tiny cleanups.
+
+2007-08-23 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.1 beta1
+
+	* Fix compilation on Debian/kFreeBSD.
+
+2007-08-16 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.1 alpha2
+
+	* Locking message now configurable.
+	* Added configuration file support: ~/.vlockrc.
+	* "vlock --new" now works even if stdin is not a terminal.
+	* Improved documentation.
+
+2007-08-11 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.1 alpha1
+
+	* Added FreeBSD support.  Build with PAM_LIBS=-lpam, install with
+	  INSTALL=ginstall.
+	* Improved signal handling.
+	* Added timeout support to password prompts.
+
+2007-08-09 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0
+
+	* No changes since vlock 2.0 rc2.
+
+2007-08-06 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0 rc2
+
+	* Improved man page and error messages.
+	* Fixed bug that prevented shadow authentication from working.
+	* vlock can now only be killed by root.  This will probably be
+	  fixed in future releases.
+
+2007-08-05 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0 rc1
+
+	* Code cleanups (comments, style).
+	* Fixed two merely theoretical security problems.
+
+2007-08-02 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0 beta2
+
+	* Many improvements to security.
+	* General cleanup to source tree.
+	* ChangeLog added.
+	* Manpages updated.
+	* LICENSE file updated, license terms unchanged.
+	* README updated.
+	* Added a SECURITY blurb.
+	* -n,--new option now implies -a,--all instead of requiring it.
+
+2007-07-30 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0 beta1
+
+	* Added manpages for all tools.
+	* Enter key must be pressed before authentication is started.
+	* When run as root, vlock now locks as the user given by the
+	  $USER environment variable.
+	* Add -n,--new option to run vlock on a new virtual console.
+
+2007-07-28 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0 alpha2
+
+	* Shadow authentication added.
+
+2007-07-25 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 2.0 alpha1
+
+	* Complete rewrite. vlock is now made of several tools called
+	  from a shell script.
+
+2007-05-23 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 1.4
+
+	* No changes since rc2.
+
+2007-05-10 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 1.4 rc2
+
+	* Make install rule made more friendly to packagers.
+	* Updated license declarations: sources now clearly
+	  state "GNU General Public License version 2".
+
+2007-05-09 Frank Benkstein <frank-vlock@benkstein.net>
+
+	vlock 1.4 rc1
+
+	* Some compile time warnings fixed..
+	* Support for SysRq disabling added.
+
+1999-01-13 Michael Johnson <johnsonm@redhat.com>
+
+	vlock 1.3
+
+1998-03-12 Michael Johnson <johnsonm@redhat.com>
+
+	vlock 1.2

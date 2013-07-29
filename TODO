@@ -1,0 +1,16 @@
+high
+----
+
+- comments
+- documentation
+
+medium
+------
+
+- generate error on invalid script
+- document ./configure options better
+- help distributors when vlock group is not avaiable at installation time
+- plugin to ensure that vlock is run only once on a machine
+
+low
+---

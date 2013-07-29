@@ -1,0 +1,2 @@
+Functions that fail should print an error message and set errno to 0 *OR* leave
+errno.

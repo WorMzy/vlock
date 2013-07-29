@@ -1,0 +1,45 @@
+OVERVIEW
+========
+
+vlock is a denial of service tool.  Linux allows any user logged into the
+virtual console to lock the system completely.  vlock takes this one step
+further and potenially grants this ability (and potentially other, even more
+hazardous ones) to any user through the use of plugins.
+
+The default installation sets permission that allow only users in the vlock
+group to run dangerous modules.  Others will still be able to lock their own
+console or terminal and run plugins that are considered secure.
+
+This behavior is configurabe through ./configure option or by editing
+config.mk.
+
+DETAILS
+=======
+
+vlock-main allows plugins to extend its functionality.  These plugins are
+separated into two groups:  modules and scripts.  Both are only loaded from
+locations that are specified at compile time.  It is extremely important that
+these directories are only writable by privileged users.
+
+MODULES
+-------
+
+Modules are shared objects that are loaded into vlock's address space.  Because
+vlock will most likely be installed setuid-root care must be taken that these
+modules are secure themselves and that access to potentially dangerous modules
+is limited to trusted users.  UNDER NO CIRCUMSTANCES MUST UNPRIVILEGED USERS BE
+ALLOWED TO PUT THEIR OWN MODULES INTO VLOCK'S MODULE DIRECTORY.  Doing this
+would allowing them to run any code they want with elevated privileges, i.e.
+as root.
+
+SCRIPTS
+-------
+
+Scripts may be any kind of executables located in vlock's script directory.
+They are run with with lowered privileges, i.e. the same as the user who
+started vlock, in a separate process.  They also don't have direct access to
+the terminal vlock runs on and thus may be considered a relatively secure
+alternative to modules.  For any privileged operations they want to perform
+they have to use helpers such as sudo.  Although less dangerous than modules
+vlock's script directory must still be protected the same as the module
+directory.

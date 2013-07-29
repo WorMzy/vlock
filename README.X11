@@ -1,0 +1,6 @@
+Although vlock is primarily designed to lock the text console of a machine it
+is also possible to use it from X.  Using the "--new" option vlock will switch
+to an empty virtual terminal and then lock the display by preventing console
+switching entirely.  After successful authentication it switches back to the
+virtual terminal that was active when vlock was started, i.e. your X session,
+when started from X.

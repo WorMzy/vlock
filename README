@@ -1,0 +1,46 @@
+::
+
+   VV       VV  LL          OOO       CCCCC  KK   KK
+    VV     VV   LL        OO   OO   CC       KK KK    originally written by
+     VV   VV    LL       OO     OO  CC       KK        Michael K. Johnson
+      VV VV     LL        OO   OO   CC       KK KK    for Linux Journal
+       VVV      LLLLLLLL    OOO       CCCCC  KK   KK
+
+
+This is vlock, the Linux _V_irtual Console locking program.  It allows
+you to lock one or all of the sessions of your Linux console display.
+
+Usage is very simple; by default, vlock locks the single console or
+terminal you are on.  If you want to lock the console completely so that
+no one else can log into any of the virtual consoles (perhaps because
+you have login sessions running on several other virtual consoles at the
+same time), you use the -a or --all flag to cause vlock to not allow any
+user to switch to any console without typing your password.
+
+  WARNING: If you lock all the consoles, they will be *really*
+  locked.  Unless you have a serial terminal, or can log in
+  remotely to kill vlock, you *will not* be able to get back to
+  your terminal session without correct authentication.
+
+  After a new installation always test vlock in a terminal to
+  verify that authentication is set up correctly.
+
+  If you loose data because you have to reset your computer
+  because of vlock -a, it is your own problem, not mine.  I
+  warned you.
+
+The root user will *always* be able to unlock any vlock session, unless
+disabled at compile time.
+
+vlock consists of several plugins.  Some of them are potentially
+dangerous and access to them should be restricted.  Please refer to
+SECURITY for a detailed description.
+
+"vlock -h" or "vlock --help" will get you a help message.
+
+To make vlock switch to a new console before locking, use the -n or
+--new flag.  If installed with proper permissions this even works from
+an X11 session.  The -n flag implies -a and thus all warnings about -a
+also apply to -n.
+
+vlock is maintained by Frank Benkstein <frank-vlock@benkstein.net>.

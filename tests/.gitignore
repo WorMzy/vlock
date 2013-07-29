@@ -1,0 +1,4 @@
+/vlock-test
+*.gcda
+*.gcno
+*.gcov

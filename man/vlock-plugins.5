@@ -1,0 +1,45 @@
+.TH VLOCK-PLUGINS 5 "10 November 2007" "Linux" "Linux Programmer's Manual"
+.SH NAME
+vlock-plugins \- plugin support for vlock
+.SH DESCRIPTION
+If vlock-main(8) is compiled with plugin support its default features are very
+limited: it can only lock the current session and ask for authenticiaton.
+However it is possible to extend this functions through plugins.  These plugins
+are loaded when vlock-main starts and can provide hooks that are called at
+certain points during the lifetime of the vlock-main process.
+.PP
+.SH "DEFAULT PLUGINS"
+The following plugins are provided when installing vlock with default options:
+.PP
+.B all
+.IP
+This plugin locks all sessions by disabling console switching.  It is also
+loaded when giving the \fB-a,--all\fR option to vlock(1).
+
+.PP
+.B new
+.IP
+This plugin switches to a new virtual console before disabling console
+switching through the "all" plugin.  It is also loaded when giving the
+\fB-n,--new\fR option to vlock(1).
+.PP
+.B nosysrq
+.IP
+Linux only.  This plugin disables the Linux SysRQ mechanism before the console
+switching is locked by the "all" plugin.  It is also loaded when giving the
+\fB-s,--disable-sysrq\fR option to vlock(1).
+.PP
+.SH "ADDITIONAL PLUGINS"
+The following plugins are only available if explicitely selected at build time:
+.PP
+.B caca
+.IP
+This plugin runs a random libcaca screensaver when the screen is locked.
+.SH WRITING PLUGINS
+For information about writing plugins see the PLUGINS file in the vlock source
+distribution.
+.SH "SEE ALSO"
+.BR vlock (1),
+.BR vlock-main (8)
+.SH AUTHORS
+Frank Benkstein <frank-vlock@benkstein.net>

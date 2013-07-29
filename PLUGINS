@@ -1,0 +1,167 @@
+OVERVIEW
+========
+
+Plugins are a way to extend vlock's functionality.  They can define
+hooks that are called at certain points in a vlock session.
+
+There are two separate types of plugins:  modules and scripts.  Modules
+are shared objects that are loaded into vlock's address space.  They run
+with the same privileges as vlock and thus are very powerful but also
+dangerous.  Scripts may be any kind of executables located in vlock's
+script directory.  They are run in separate processes with lowered
+privileges, i.e. the same as the user who started vlock.
+
+For simple tasks scripts should be preferred over modules.  They are
+easier to develop and test and have a lower impact on security and
+stability.
+
+NB:  The following interface is not yet declared stable.  It is not guaranteed
+that plugins (modules or scripts) that work with vlock 2.2 will work with
+future versions.
+
+DEPENDENCIES
+============
+
+Plugins may depend on each other in several ways.  There are six
+different types of dependencies. Each dependency type is represented by
+a list of plugin names.  The way of declaring them is different for
+modules and scripts but their names and meaning are the same.
+
+Resolving the dependencies is done after all initially requested plugins
+are loaded and may fail if dependencies cannot be met.
+
+The names and meaning of the dependencies are as follows:
+
+requires:
+  The plugins listed here must be loaded for the declaring plugin to
+  work.  If any of the plugins is not loaded yet it will be loaded
+  automatically.  Dependency resolving fails if a plugin cannot be
+  loaded.
+
+needs:
+  The plugins listed here must be loaded for the declaring plugin to
+  work.  Dependency resolving fails if any of the plugins listed here is
+  not loaded.
+
+depends:
+  The plugins listed here must be loaded for the declaring plugin to
+  work.  If any of the plugins listed here is not loaded the declaring
+  plugin is automatically unloaded.  Dependency resolving fails if the
+  declaring plugin is already required by some other plugin.
+
+conflicts:
+  The plugins listed here must not be loaded at the same time as the
+  declaring plugin.  Dependency resolving fails if any of the plugins
+  listed here is loaded.
+
+The other two dependencies are used to specify the order of the plugins:
+
+preceeds:
+  The plugins listed here must come after the declaring plugin.
+
+succeeds:
+  The plugins listed here must come before the declaring plugin.
+
+Sorting the plugins may fail if the "preceeds" and "succeeds"
+dependencies introduce circles.
+
+HOOKS
+=====
+
+There are four different hooks that plugins may declare:
+
+vlock_start:
+  This hook is called once immediately after vlock is initialized and
+  before any authentication prompt.  If a plugin signals an error in
+  this hook vlock aborts and calls the vlock_end hooks of all previously
+  called modules.
+
+vlock_end:
+  This hook is called once after successful authentication or if vlock
+  is killed by SIGTERM.  Errors in this hook are ignored.
+
+vlock_save:
+  This hook is called after the vlock message is displayed every time
+  the timeout expires or the escape key is pressed.  If a plugin signals
+  an error in this hook its vlock_save_abort hook is called and both
+  hooks are not called again afterwards.
+
+vlock_save_abort:
+  This hook is called after vlock_save was called and any key was
+  pressed.  If a plugin signals an error in this hook both this hook and
+  the vlock_save hook are not called again.
+
+Note: Hooks should not block.  Screensavers should be executed in a
+background process or thread.  The only exception would be hooks that
+suspend the machine (though these technically do not block in the common
+sense).
+
+MODULES
+=======
+
+Modules are shared objects that are loaded into vlock's address space.
+They export hook functions and dependencies as global functions.  To
+ensure definitions modules should include vlock_plugin.h from the module
+subdirectory of the vlock source distribution.
+
+dependencies
+------------
+
+Dependencies are declared as NULL terminated arrays of const char
+pointers.  Empty lists can be just left out.  Example::
+
+  /* From nosysrq.c */
+  const char *preceeds[] = { "new", "all", NULL };
+  const char *depends[] = { "all", NULL };
+
+hooks
+-----
+
+Hooks are boolean functions that take a void pointer pointer.  Their
+return status indicates success or failure.  The argument points to a
+void pointer that may be set freely.  It may be used to maintain state
+between the different hooks.  It is initialized to NULL.  Hook functions
+must not block and not terminate the program.  On error they may print
+the cause of the error to stderr in addition to returning false.
+
+example
+-------
+
+Please see modules/example_module.c in the vlock source distribution.
+
+SCRIPTS
+=======
+
+Scripts are executables that are started as child processes of vlock.
+They run with the same privileges as the user starting vlock instead of
+the privileges of the vlock process.  They communicate with vlock
+through command line arguments and pipes.
+
+dependencies
+------------
+
+To get the dependencies of a script it is run once for each dependency
+item with the dependency name as the single command line argument.  Its
+standard output is redirected to a pipe that is read by vlock.  The
+plugin should print the dependency items, if any, separated by arbitrary
+white space (carriage return, space or newline) and then exit.  No
+errors are detected in this process.
+
+hooks
+-----
+
+After the dependencies are read the script is run one last time this
+time with the string "hooks" as the single command line argument.  Its
+standard input is redirected from a pipe that is written to by vlock.
+Whenever a hook should be executed its name followed by a new line
+character are written to the pipe.  The script's standard output and
+standard error are redirected to /dev/null.  The script should only exit
+if end-of-file is detected on standard in even in cases where no
+subsequent hooks need to be executed.  Error detection is limited to
+detecting if the script exits prematurely.  There is currently no way
+for a script what kind of error happened.
+
+example
+-------
+
+Please see scripts/example_script.sh in the vlock source distribution.

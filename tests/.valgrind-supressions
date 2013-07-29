@@ -1,0 +1,5 @@
+{  
+  Linker
+  Memcheck:Cond
+  obj:/lib/ld-*.so
+}
